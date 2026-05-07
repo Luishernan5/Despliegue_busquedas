@@ -1,6 +1,7 @@
 class Nodo:
 
     def __init__(self, datos, padre=None):
+
         self.datos = datos
         self.padre = padre
         self.hijos = []
@@ -28,7 +29,10 @@ class Nodo:
         return self.costo
 
     def en_lista(self, lista_nodos):
+
         for n in lista_nodos:
+
             if self.datos == n.datos:
                 return True
+
         return False

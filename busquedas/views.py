@@ -5,19 +5,34 @@ from algorithms.dfs import buscar_solucion_DFS
 from algorithms.ucs import buscar_solucion_UCS
 
 
+def obtener_camino(nodo, estado_inicial):
+
+    camino = []
+
+    while nodo.get_padre() is not None:
+
+        camino.append(nodo.get_datos())
+
+        nodo = nodo.get_padre()
+
+    camino.append(estado_inicial)
+
+    camino.reverse()
+
+    return camino
+
+
 def index(request):
 
-    resultado = None
-    algoritmo_usado = None
-    costo = 0
+    resultados = {}
 
     if request.method == 'POST':
 
         inicial = request.POST['inicial']
-        objetivo = request.POST['objetivo']
-        algoritmo = request.POST['algoritmo']
 
-        algoritmo_usado = algoritmo.upper()
+        objetivo = request.POST['objetivo']
+
+        algoritmo = request.POST['algoritmo']
 
         estado_inicial = list(
             map(int, inicial.split(','))
@@ -35,12 +50,22 @@ def index(request):
                 solucion
             )
 
+            resultados['BFS'] = obtener_camino(
+                nodo,
+                estado_inicial
+            )
+
         # DFS
         elif algoritmo == 'dfs':
 
             nodo = buscar_solucion_DFS(
                 estado_inicial,
                 solucion
+            )
+
+            resultados['DFS'] = obtener_camino(
+                nodo,
+                estado_inicial
             )
 
         # UCS
@@ -51,26 +76,46 @@ def index(request):
                 solucion
             )
 
-        camino = []
+            resultados['UCS'] = obtener_camino(
+                nodo,
+                estado_inicial
+            )
 
-        while nodo.get_padre() is not None:
+        # TODOS
+        elif algoritmo == 'todos':
 
-            camino.append(nodo.get_datos())
+            nodo_bfs = buscar_solucion_BFS(
+                estado_inicial,
+                solucion
+            )
 
-            nodo = nodo.get_padre()
+            nodo_dfs = buscar_solucion_DFS(
+                estado_inicial,
+                solucion
+            )
 
-            costo += 1
+            nodo_ucs = buscar_solucion_UCS(
+                estado_inicial,
+                solucion
+            )
 
-        camino.append(estado_inicial)
+            resultados['BFS'] = obtener_camino(
+                nodo_bfs,
+                estado_inicial
+            )
 
-        camino.reverse()
+            resultados['DFS'] = obtener_camino(
+                nodo_dfs,
+                estado_inicial
+            )
 
-        resultado = camino
+            resultados['UCS'] = obtener_camino(
+                nodo_ucs,
+                estado_inicial
+            )
 
     return render(request, 'index.html', {
 
-        'resultado': resultado,
-        'algoritmo': algoritmo_usado,
-        'costo': costo
+        'resultados': resultados
 
     })

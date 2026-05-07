@@ -1,16 +1,19 @@
 from .nodo import Nodo
 
+
 def buscar_solucion_DFS(estado_inicial, solucion):
 
     visitados = []
     frontera = []
 
     nodo_inicial = Nodo(estado_inicial)
+
     frontera.append(nodo_inicial)
 
     while frontera:
 
         nodo = frontera.pop()
+
         visitados.append(nodo)
 
         if nodo.get_datos() == solucion:
@@ -19,9 +22,13 @@ def buscar_solucion_DFS(estado_inicial, solucion):
         dato = nodo.get_datos()
 
         hijos_datos = [
+
             [dato[1], dato[0], dato[2], dato[3]],
+
             [dato[0], dato[2], dato[1], dato[3]],
+
             [dato[0], dato[1], dato[3], dato[2]]
+
         ]
 
         hijos = []
@@ -29,9 +36,11 @@ def buscar_solucion_DFS(estado_inicial, solucion):
         for h in hijos_datos:
 
             hijo = Nodo(h)
+
             hijo.set_padre(nodo)
 
             if not hijo.en_lista(visitados) and not hijo.en_lista(frontera):
+
                 frontera.append(hijo)
 
             hijos.append(hijo)
