@@ -1,66 +1,133 @@
-{% load static %}
-
 <!DOCTYPE html>
-<html lang="es">
+<html>
 
 <head>
 
-    <meta charset="UTF-8">
+    <title>Algoritmos de Búsqueda</title>
 
-    <title>Búsquedas Informadas Examen</title>
+    <style>
 
-    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+        body{
+            background:#0f172a;
+            font-family:Arial;
+            color:white;
+            text-align:center;
+            padding-top:40px;
+        }
+
+        .contenedor{
+
+            width:500px;
+            margin:auto;
+            background:#1e293b;
+            padding:30px;
+            border-radius:15px;
+        }
+
+        input,select{
+
+            width:100%;
+            padding:12px;
+            margin-top:10px;
+            border:none;
+            border-radius:10px;
+            box-sizing:border-box;
+            font-size:15px;
+        }
+
+        button{
+
+            width:100%;
+            padding:12px;
+            margin-top:15px;
+            border:none;
+            border-radius:10px;
+            background:#38bdf8;
+            color:white;
+            font-size:16px;
+            cursor:pointer;
+        }
+
+        button:hover{
+
+            background:#0ea5e9;
+        }
+
+        .resultado{
+
+            margin-top:20px;
+            background:#334155;
+            padding:15px;
+            border-radius:10px;
+            word-wrap:break-word;
+        }
+
+        .error{
+
+            color:#f87171;
+            margin-top:20px;
+        }
+
+        h1{
+
+            color:#38bdf8;
+        }
+
+        h2{
+
+            color:#38bdf8;
+        }
+
+    </style>
 
 </head>
 
 <body>
 
-<div class="container">
+<div class="contenedor">
 
-    <h1>
-        Proyecto de Búsquedas No Informadas
-    </h1>
+    <h1>Algoritmos de Búsqueda</h1>
 
     <form method="POST">
 
         {% csrf_token %}
 
-        <label>
-            Estado Inicial
-        </label>
+        <input
+            type="text"
+            name="estado_inicial"
+            placeholder="Estado inicial Ej: 4,2,3,1"
+            value="{{ estado_inicial }}"
+            required
+        >
 
         <input
             type="text"
-            name="inicial"
-            value="4,2,3,1"
+            name="estado_final"
+            placeholder="Estado final Ej: 1,2,3,4"
+            value="{{ estado_final }}"
+            required
         >
 
-        <label>
-            Estado Objetivo
-        </label>
+        <select name="algoritmo" required>
 
-        <input
-            type="text"
-            name="objetivo"
-            value="1,2,3,4"
-        >
-
-        <label>
-            Algoritmo
-        </label>
-
-        <select name="algoritmo">
-
-            <option value="bfs">
-                BFS
+            <option value="" disabled
+            {% if not algoritmo %}selected{% endif %}>
+                Selecciona un algoritmo
             </option>
 
-            <option value="dfs">
-                DFS
+            <option value="bfs"
+            {% if algoritmo == 'bfs' %}selected{% endif %}>
+                Búsqueda en Amplitud (BFS)
             </option>
 
-            <option value="ucs">
-                UCS
+            <option value="dfs"
+            {% if algoritmo == 'dfs' %}selected{% endif %}>
+                Búsqueda en Profundidad (DFS)
+            </option>
+
+            <option value="recursiva"
+            {% if algoritmo == 'recursiva' %}selected{% endif %}>
+                Búsqueda Recursiva
             </option>
 
         </select>
@@ -75,35 +142,23 @@
 
     {% if resultado %}
 
-    <div class="resultado">
+        <div class="resultado">
 
-        <h2>
-            Resultado
-        </h2>
+            <h2>Resultado</h2>
 
-        <p>
-            <strong>Algoritmo:</strong>
-            {{ algoritmo }}
-        </p>
+            {{ resultado }}
 
-        <p>
-            <strong>Movimientos:</strong>
-            {{ costo }}
-        </p>
+        </div>
 
-        <ul>
+    {% endif %}
 
-            {% for paso in resultado %}
+    {% if error %}
 
-                <li>
-                    {{ paso }}
-                </li>
+        <div class="error">
 
-            {% endfor %}
+            {{ error }}
 
-        </ul>
-
-    </div>
+        </div>
 
     {% endif %}
 
