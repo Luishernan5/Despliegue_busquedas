@@ -1,0 +1,113 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <title>Búsquedas Informadas Examen</title>
+
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+
+</head>
+
+<body>
+
+<div class="container">
+
+    <h1>
+        Proyecto de Búsquedas No Informadas
+    </h1>
+
+    <form method="POST">
+
+        {% csrf_token %}
+
+        <label>
+            Estado Inicial
+        </label>
+
+        <input
+            type="text"
+            name="inicial"
+            value="4,2,3,1"
+        >
+
+        <label>
+            Estado Objetivo
+        </label>
+
+        <input
+            type="text"
+            name="objetivo"
+            value="1,2,3,4"
+        >
+
+        <label>
+            Algoritmo
+        </label>
+
+        <select name="algoritmo">
+
+            <option value="bfs">
+                BFS
+            </option>
+
+            <option value="dfs">
+                DFS
+            </option>
+
+            <option value="ucs">
+                UCS
+            </option>
+
+        </select>
+
+        <button type="submit">
+
+            Resolver
+
+        </button>
+
+    </form>
+
+    {% if resultado %}
+
+    <div class="resultado">
+
+        <h2>
+            Resultado
+        </h2>
+
+        <p>
+            <strong>Algoritmo:</strong>
+            {{ algoritmo }}
+        </p>
+
+        <p>
+            <strong>Movimientos:</strong>
+            {{ costo }}
+        </p>
+
+        <ul>
+
+            {% for paso in resultado %}
+
+                <li>
+                    {{ paso }}
+                </li>
+
+            {% endfor %}
+
+        </ul>
+
+    </div>
+
+    {% endif %}
+
+</div>
+
+</body>
+</html>
